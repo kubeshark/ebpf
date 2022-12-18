@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cilium/ebpf/internal/testutils"
 	qt "github.com/frankban/quicktest"
+	"github.com/kubeshark/ebpf/internal/testutils"
 )
 
 func TestTraceEventTypePMU(t *testing.T) {

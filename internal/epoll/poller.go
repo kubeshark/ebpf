@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/cilium/ebpf/internal"
-	"github.com/cilium/ebpf/internal/unix"
+	"github.com/kubeshark/ebpf/internal"
+	"github.com/kubeshark/ebpf/internal/unix"
 )
 
 // Poller waits for readiness notifications from multiple file descriptors.

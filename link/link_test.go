@@ -8,11 +8,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/asm"
-	"github.com/cilium/ebpf/internal/sys"
-	"github.com/cilium/ebpf/internal/testutils"
-	"github.com/cilium/ebpf/internal/unix"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/asm"
+	"github.com/kubeshark/ebpf/internal/sys"
+	"github.com/kubeshark/ebpf/internal/testutils"
+	"github.com/kubeshark/ebpf/internal/unix"
 )
 
 func TestRawLink(t *testing.T) {

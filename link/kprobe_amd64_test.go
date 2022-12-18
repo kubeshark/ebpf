@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cilium/ebpf"
+	"github.com/kubeshark/ebpf"
 )
 
 func TestKprobeOffset(t *testing.T) {

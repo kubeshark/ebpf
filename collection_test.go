@@ -6,10 +6,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/cilium/ebpf/asm"
-	"github.com/cilium/ebpf/btf"
-	"github.com/cilium/ebpf/internal"
-	"github.com/cilium/ebpf/internal/testutils"
+	"github.com/kubeshark/ebpf/asm"
+	"github.com/kubeshark/ebpf/btf"
+	"github.com/kubeshark/ebpf/internal"
+	"github.com/kubeshark/ebpf/internal/testutils"
 )
 
 func TestCollectionSpecNotModified(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/cilium/ebpf/internal/unix"
 	qt "github.com/frankban/quicktest"
+	"github.com/kubeshark/ebpf/internal/unix"
 )
 
 func TestVerifierErrorWhitespace(t *testing.T) {

@@ -9,10 +9,10 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/internal"
-	"github.com/cilium/ebpf/internal/epoll"
-	"github.com/cilium/ebpf/internal/unix"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/internal"
+	"github.com/kubeshark/ebpf/internal/epoll"
+	"github.com/kubeshark/ebpf/internal/unix"
 )
 
 var (

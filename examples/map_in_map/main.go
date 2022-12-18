@@ -15,8 +15,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/rlimit"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/rlimit"
 )
 
 func main() {

@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/asm"
-	"github.com/cilium/ebpf/internal/testutils"
 	"github.com/google/go-cmp/cmp"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/asm"
+	"github.com/kubeshark/ebpf/internal/testutils"
 )
 
 func TestRingbufReader(t *testing.T) {

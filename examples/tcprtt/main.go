@@ -27,14 +27,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/cilium/ebpf/internal"
-	"github.com/cilium/ebpf/link"
-	"github.com/cilium/ebpf/ringbuf"
-	"github.com/cilium/ebpf/rlimit"
+	"github.com/kubeshark/ebpf/internal"
+	"github.com/kubeshark/ebpf/link"
+	"github.com/kubeshark/ebpf/ringbuf"
+	"github.com/kubeshark/ebpf/rlimit"
 )
 
 // $BPF_CLANG and $BPF_CFLAGS are set by the Makefile.
-//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS -type event bpf tcprtt.c -- -I../headers
+//go:generate go run github.com/kubeshark/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS -type event bpf tcprtt.c -- -I../headers
 
 func main() {
 	stopper := make(chan os.Signal, 1)

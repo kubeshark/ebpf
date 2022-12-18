@@ -15,14 +15,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/cilium/ebpf/link"
-	"github.com/cilium/ebpf/perf"
-	"github.com/cilium/ebpf/rlimit"
+	"github.com/kubeshark/ebpf/link"
+	"github.com/kubeshark/ebpf/perf"
+	"github.com/kubeshark/ebpf/rlimit"
 	"golang.org/x/sys/unix"
 )
 
 // $BPF_CLANG and $BPF_CFLAGS are set by the Makefile.
-//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS -target native -type event bpf uretprobe.c -- -I../headers
+//go:generate go run github.com/kubeshark/ebpf/cmd/bpf2go -cc $BPF_CLANG -cflags $BPF_CFLAGS -target native -type event bpf uretprobe.c -- -I../headers
 
 const (
 	// The path to the ELF binary containing the function to trace.

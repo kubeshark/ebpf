@@ -5,10 +5,10 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/btf"
-	"github.com/cilium/ebpf/internal"
-	"github.com/cilium/ebpf/internal/sys"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/btf"
+	"github.com/kubeshark/ebpf/internal"
+	"github.com/kubeshark/ebpf/internal/sys"
 )
 
 var ErrNotSupported = internal.ErrNotSupported

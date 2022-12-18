@@ -7,9 +7,9 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/internal/sys"
-	"github.com/cilium/ebpf/internal/unix"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/internal/sys"
+	"github.com/kubeshark/ebpf/internal/unix"
 )
 
 func init() {

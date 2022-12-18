@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cilium/ebpf/asm"
-	"github.com/cilium/ebpf/internal"
-	"github.com/cilium/ebpf/internal/sys"
-	"github.com/cilium/ebpf/internal/testutils"
-	"github.com/cilium/ebpf/internal/unix"
 	qt "github.com/frankban/quicktest"
+	"github.com/kubeshark/ebpf/asm"
+	"github.com/kubeshark/ebpf/internal"
+	"github.com/kubeshark/ebpf/internal/sys"
+	"github.com/kubeshark/ebpf/internal/testutils"
+	"github.com/kubeshark/ebpf/internal/unix"
 )
 
 func TestMapInfoFromProc(t *testing.T) {

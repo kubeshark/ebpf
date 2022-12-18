@@ -5,7 +5,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/cilium/ebpf/internal/testutils"
+	"github.com/kubeshark/ebpf/internal/testutils"
 )
 
 func TestLoadingSpec(t *testing.T) {

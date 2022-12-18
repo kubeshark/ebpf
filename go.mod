@@ -1,4 +1,4 @@
-module github.com/cilium/ebpf
+module github.com/kubeshark/ebpf
 
 go 1.17
 

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/internal/sys"
+	"github.com/kubeshark/ebpf"
+	"github.com/kubeshark/ebpf/internal/sys"
 )
 
 type RawTracepointOptions struct {
