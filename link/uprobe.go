@@ -42,22 +42,20 @@ var (
 type Executable struct {
 	// Path of the executable on the filesystem.
 	path string
-	// Parsed ELF and dynamic symbols' addresses.
-	addresses map[string]uint64
+	// Parsed ELF symbols and dynamic symbols offsets.
+	offsets map[string]uint64
 }
 
 // UprobeOptions defines additional parameters that will be used
 // when loading Uprobes.
 type UprobeOptions struct {
-	// Symbol address. Must be provided in case of external symbols (shared libs).
-	// If set, overrides the address eventually parsed from the executable.
-	Address uint64
-	// The offset relative to given symbol. Useful when tracing an arbitrary point
-	// inside the frame of given symbol.
-	//
-	// Note: this field changed from being an absolute offset to being relative
-	// to Address.
+	// Symbol offset. Must be provided in case of external symbols (shared libs).
+	// If set, overrides the offset eventually parsed from the executable.
 	Offset uint64
+	// The offset relative to given symbol. Useful when tracing an arbitrary point
+	// inside the frame of given symbol and eliminates the need of recalculating
+	// the absolute offset.
+	RelativeOffset uint64
 	// Only set the uprobe on the given process ID. Useful when tracing
 	// shared library calls or programs that have many running instances.
 	PID int
@@ -106,8 +104,8 @@ func OpenExecutable(path string) (*Executable, error) {
 	}
 
 	ex := Executable{
-		path:      path,
-		addresses: make(map[string]uint64),
+		path:    path,
+		offsets: make(map[string]uint64),
 	}
 
 	if err := ex.load(se); err != nil {
@@ -136,7 +134,7 @@ func (ex *Executable) load(f *internal.SafeELFFile) error {
 			continue
 		}
 
-		address := s.Value
+		off := s.Value
 
 		// Loop over ELF segments.
 		for _, prog := range f.Progs {
@@ -152,42 +150,51 @@ func (ex *Executable) load(f *internal.SafeELFFile) error {
 				// fn symbol offset = fn symbol VA - .text VA + .text offset
 				//
 				// stackoverflow.com/a/40249502
-				address = s.Value - prog.Vaddr + prog.Off
+				off = s.Value - prog.Vaddr + prog.Off
 				break
 			}
 		}
 
-		ex.addresses[s.Name] = address
+		ex.offsets[s.Name] = off
 	}
 
 	return nil
 }
 
-// address calculates the address of a symbol in the executable.
-//
-// opts must not be nil.
-func (ex *Executable) address(symbol string, opts *UprobeOptions) (uint64, error) {
-	if opts.Address > 0 {
-		return opts.Address + opts.Offset, nil
+func (ex *Executable) offset(symbol string) (uint64, error) {
+	if off, ok := ex.offsets[symbol]; ok {
+		// Symbols with location 0 from section undef are shared library calls and
+		// are relocated before the binary is executed. Dynamic linking is not
+		// implemented by the library, so mark this as unsupported for now.
+		//
+		// Since only offset values are stored and not elf.Symbol, if the value is 0,
+		// assume it's an external symbol.
+		if off == 0 {
+			return 0, fmt.Errorf("cannot resolve %s library call '%s', "+
+				"consider providing the offset via options: %w", ex.path, symbol, ErrNotSupported)
+		}
+		return off, nil
+	}
+	return 0, fmt.Errorf("symbol %s: %w", symbol, ErrNoSymbol)
+}
+
+// offsetWithOpts adds opts.RelativeOffset to symbol's offset
+// if opts.Offset is not set.
+func (ex *Executable) offsetWithOpts(symbol string, opts *UprobeOptions) (uint64, error) {
+	if opts == nil {
+		return ex.offset(symbol)
 	}
 
-	address, ok := ex.addresses[symbol]
-	if !ok {
-		return 0, fmt.Errorf("symbol %s: %w", symbol, ErrNoSymbol)
+	offset := opts.Offset
+	if offset == 0 {
+		offset = opts.RelativeOffset
+		off, err := ex.offset(symbol)
+		if err != nil {
+			return 0, err
+		}
+		offset += off
 	}
-
-	// Symbols with location 0 from section undef are shared library calls and
-	// are relocated before the binary is executed. Dynamic linking is not
-	// implemented by the library, so mark this as unsupported for now.
-	//
-	// Since only offset values are stored and not elf.Symbol, if the value is 0,
-	// assume it's an external symbol.
-	if address == 0 {
-		return 0, fmt.Errorf("cannot resolve %s library call '%s': %w "+
-			"(consider providing UprobeOptions.Address)", ex.path, symbol, ErrNotSupported)
-	}
-
-	return address + opts.Offset, nil
+	return offset, nil
 }
 
 // Uprobe attaches the given eBPF program to a perf event that fires when the
@@ -272,7 +279,7 @@ func (ex *Executable) uprobe(symbol string, prog *ebpf.Program, opts *UprobeOpti
 		opts = &UprobeOptions{}
 	}
 
-	offset, err := ex.address(symbol, opts)
+	offset, err := ex.offsetWithOpts(symbol, opts)
 	if err != nil {
 		return nil, err
 	}
