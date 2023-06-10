@@ -59,7 +59,7 @@ blocks:
           - cache store
       - name: Run unit tests on previous stable Go
         commands:
-          - sem-version go 1.17
+          - sem-version go 1.19
           - go test -v ./cmd/bpf2go -run TestRun
           - timeout -s KILL 600s ./run-tests.sh 5.10
       - name: Run unit tests
